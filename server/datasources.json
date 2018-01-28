@@ -1,0 +1,16 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "RecoDB": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "mongodb://localhost:27017/Reco",
+    "database": "Reco",
+    "password": "",
+    "name": "RecoDB",
+    "user": "",
+    "connector": "mongodb"
+  }
+}

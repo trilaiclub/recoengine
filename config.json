@@ -1,0 +1,28 @@
+{
+   "solrbucket": {
+     "client": {
+       "host": "127.0.0.1",
+       "port": 8983,
+       "path": "/solr",
+       "core": "activities",
+       "solrVersion": "7.2"
+     }
+
+   },
+    "uir": {
+      "compute_purchased" : {
+        "params":[
+          "facet.field=category",
+          "facet.field=tokens",
+          "facet.mincount=1",
+          "facet.sort=count",
+          "facet=on",
+          "fl=category,tokens,when",
+          "fq=action:purchased",
+          "q=*:*",
+          "sort=when desc"
+        ]
+      }
+
+    }
+}

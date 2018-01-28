@@ -1,0 +1,32 @@
+{
+  "name": "RecoEngine",
+  "plural": "RecoEngine",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "cacheWord": {
+      "type": "string",
+      "required": true
+    },
+    "action": {
+      "type": "string",
+      "required": true
+    },
+    "feedlyPipeTag": {
+      "type": "string",
+      "required": true
+    },
+    "feedlyPipeTagType": {
+      "type": "string",
+      "required": true,
+      "default": "feed"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
