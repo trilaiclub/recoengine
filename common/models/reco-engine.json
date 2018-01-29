@@ -15,6 +15,10 @@
       "type": "string",
       "required": true
     },
+    "category": {
+      "type": "string",
+      "required": true
+    },
     "feedlyPipeTag": {
       "type": "string",
       "required": true

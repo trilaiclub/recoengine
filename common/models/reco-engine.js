@@ -1,21 +1,23 @@
 'use strict';
 var querystring = require('querystring');
 var solr = require('solr-client');
+var request = require('request');
 
 //Config
   var configJson = process.cwd() + '/' + "config.json";
-  var config = require(configJson);
+  var configObj = require(configJson);
 
 module.exports = function(Recoengine) {
 
     //Private
-      var solrBucket = config.solrbucket;
+      var solrBucket = configObj.solrbucket;
       solrBucket.client.host = process.env.SOLR_BUCKET;
 
       Recoengine.sClient = solr.createClient(solrBucket.client);
 
-      Recoengine.sqActivitiesByUserID = function(squery, userID) {
+      Recoengine.sqActivitiesByUserID = function(squery, userID, cb) {
 
+          var response = "";
           //create solr client
             var query =Recoengine.sClient.createQuery();
 
@@ -32,12 +34,94 @@ module.exports = function(Recoengine) {
 
               Recoengine.sClient.search(query,function(err,obj){
                  if(err){
+
                   console.log(err);
+                  obj = err;
                  }else{
-                  console.log(JSON.stringify(obj, undefined, 2));
+
+                  response = obj;
+                  console.log("Response:" + JSON.stringify(obj, undefined, 2));
                  }
+
+                 cb(err, obj);
               });
       };
+
+    //Reco clone
+
+      Recoengine.clone = function(obj){
+
+        return JSON.parse(JSON.stringify(obj));
+      }
+
+    //Create object from two set array
+
+      Recoengine.createNamedList = function(array, ru){
+
+          var result = {};
+          var key = '';
+          for(var index = 0; index < array.length; index += 2){
+
+              key = (ru) ? array[index].replace(/_/g, ' ') : array[index];
+              result[key] = array[index+1]
+          }
+
+          return result;
+      }
+
+    //Build URL
+
+      Recoengine.buildRequest = function(fCategory, query, fields) {
+
+          var streamId = configObj.proxy.client.categoryStream + fCategory;
+          var url = configObj.proxy.client.url
+                              + '/feedlycoms/searchInFeedPipe'
+                              + "?streamId=" + streamId
+                              + "&query=" + query
+                              + "&fields=" + fields;
+          var options = {
+                url: url.replace(/ /g, '%20')
+          };
+
+          return options;
+      }
+
+      //Parse body
+
+      Recoengine.parseBody = function(body){
+
+          var obj = JSON.parse(body);
+          return JSON.parse(obj.response.body);
+      }
+
+    //Copy Array to maintain order
+
+      Recoengine.copyArray = function(sObj, dObj) {
+
+          for (const [key, value] of Object.entries(dObj)) {
+
+              if(key in sObj) dObj[key] = sObj[key];
+          }
+
+          return dObj;
+      }
+
+    //Find in rules
+
+        Recoengine.formatRulesAsCategory = function(rules) {
+            var result = {};
+            for(var index = 0; index < rules.length; index++){
+
+                var category = rules[index].category;
+
+                if(!(category in result))
+                  result[category] = [];
+
+                result[category].push(rules[index]);
+            }
+
+            return result;
+        }
 
     //Train
 
@@ -55,18 +139,121 @@ module.exports = function(Recoengine) {
               returns: {arg: 'response', type: 'object', 'http': {source: 'res'}}
         });
 
+    //Compute UIR
+
+          Recoengine.computeUIRank = function(sqResponse, cb){
+
+            //Inverse of chronological order maintained
+            var ranks = {"category": {}, "tokens": {}, "searchkeys": {}};
+
+            var rFacets = sqResponse.facet_counts.facet_fields;
+            var response = sqResponse.response;
+
+            var sFacets = rFacets.category.concat(rFacets.tokens);
+            var facets = Recoengine.createNamedList(sFacets, true);
+
+            console.log("Docs:" + JSON.stringify(response.docs, undefined, 2));
+
+            var docs = response.docs;
+            for(var index = 0; index < docs.length; index++){
+
+              //Category
+              var catName = docs[index].category.toLowerCase();
+
+              ranks.category[catName] = (Object.keys(facets).includes(catName)) ? facets[catName] : 0;
+
+              //Tokens
+              for(var tIndex = 0; tIndex < docs[index].tokens.length; tIndex++){
+
+                  var tokenKey = docs[index].tokens[tIndex].toLowerCase();
+                  var value = (Object.keys(facets).includes(tokenKey)) ? facets[tokenKey] : 0;
+                  ranks.tokens[tokenKey] = value;
+
+                  tokenKey = catName + "~" + tokenKey;
+                  ranks.searchkeys[tokenKey] = value;
+               }
+            }
+
+            cb(null, ranks);
+          };
+
+    //Process rule
+
+        Recoengine.process  = function(phrase, rule) {
+
+            var query = rule.cacheWord.replace(/~/g, '');
+            var space = (query.length > 0) ? ' ' : '';
+                query += space + phrase;
+            console.log(query + '---');
+            var options = Recoengine.buildRequest(rule.feedlyPipeTag, query, "title");
+            return options;
+        }
+
     //Compute
 
         Recoengine.compute = function(userID, cb) {
 
+          var config = Recoengine.clone(configObj);
+
+
+          //Purchased algo
+
           var purchasedQuery = config.uir.compute_purchased.params;
-          console.log("Given Query: " + purchasedQuery);
+          var action = "purchased";
+          var pResponse = {};
 
-          var response = Recoengine.sqActivitiesByUserID(purchasedQuery, userID)
+          console.log("Given " + action + " Query: " + purchasedQuery); //debug
 
-          Recoengine.prepareUIRank()
+          Recoengine.sqActivitiesByUserID(purchasedQuery, userID, function(err, sqResponse){
 
-          cb(null, userID)
+            Recoengine.computeUIRank(sqResponse, function(err, uiRanks) {
+
+              Recoengine.find({where: {action:action}}, function(err, rRules){
+
+                  var ruleSet = Recoengine.formatRulesAsCategory(rRules);
+                  var allRule = ("All" in ruleSet);
+
+                  console.log(ruleSet); //debug
+
+                  /*request(options, function (error, response, body) {
+
+                     if(error)
+                        pResponse = error;
+                     else
+                        pResponse = Recoengine.parseBody(body);
+
+                        cb(null, pResponse);
+                  });*/
+
+                  var proxyJson = process.cwd() + '/' + "proxysample.json";
+                  var pResponse = require(proxyJson);
+
+                  for (const [key, value] of Object.entries(uiRanks.searchkeys)) {
+
+                      var keyPair = key.split('~');
+                      var category = keyPair[0];
+                      var phrase = category + ' ' + keyPair[1];
+
+                      var header = (category in ruleSet) ? category : "All";
+
+                      if(header in ruleSet) {
+
+                          for(var index = 0; index < ruleSet[header].length; index++) {
+
+                                  var options = Recoengine.process(phrase, ruleSet[header][index]);
+                                  console.log(options); //debug
+                          }
+                      }
+                  }
+
+              });
+
+              cb(null, uiRanks);
+            });
+          });
+
+          //Browsed algo
+
         }
 
         Recoengine.remoteMethod('compute', {
@@ -74,6 +261,4 @@ module.exports = function(Recoengine) {
               accepts: {arg: 'userid', type: 'string'},
               returns: {arg: 'response', type: 'object', 'http': {source: 'res'}}
         });
-
-
 };
