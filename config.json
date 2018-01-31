@@ -10,7 +10,7 @@
    },
   "proxy": {
     "client": {
-      "url": "http://proxy:3001/api",
+      "url": "http://proxy:3002/api",
       "user": "06ed4d6b-1d1c-4b1e-8e91-05502c2c6508",
       "authUrl": "http://proxy:3001/api/auth",
       "secret": "OAuth   A1j2bsImQdCENT7FyWxSWABu7_KwSQOKNvAySLwJQlQT3QoRlpur6iG56Xju8owoOfMF7bGj3wFYW4_ZW5kCCYVL_CqtTSUi72hl1U1OGuLPYU7b41jROO3K9D0ozhJq3bf6ixoHhNIi_Qp7JcNVbZx3gnObI0J2FUyGxZ7CkwzxPWyo5yzfDb0FolBaN6JR77bG76JgGGZdIuvRLKi7118r-VKX_Q40VmlAJabZmmEwAouivQp31kDLxqFLIA:feedlydev",
