@@ -11,10 +11,10 @@
   "proxy": {
     "client": {
       "url": "http://proxy:3002/api",
-      "user": "8d79bb29-bf31-4383-89aa-6b824f81ece0",
+      "user": "06ed4d6b-1d1c-4b1e-8e91-05502c2c6508",
       "authUrl": "http://proxy:3001/api/auth",
-      "secret": "OAuth   AwgOpsRKvpP9MgiAmjJqtd5YiLxVxH4GcKpwEQF4Nfslm9-PWHoxRto58FNWRfww292L0wo8f6GPZGwWG1DT_LCYcJmwDywGMJq5VPQidlMYZOkTgIXEYU2mrSNUNQedmoo0dOV268fIqQ9sNQbSnK5HI3wyJMnu71mbxecr91gEOYc0_Ix0-AoIXpNE7TJG5M21OjhdyJB2R-edBLcDzA29dRCc3tPL1GGAMrdrd9rHbSVd75KnN5fIT3FG:feedlydev",
-      "categoryStream": "user/8d79bb29-bf31-4383-89aa-6b824f81ece0/category/"
+      "secret": "OAuth   A3ibksO6sg-RUSkBJN9OoDOuP3BhuceOYJeDxhlakpi63tmoRg1kvWDV3zNE2o1PACMet5s6R3Bqsjef8qaYQPx_1XnFMMIph1c5lW2MIcxUlkf4Qv4TWDWy51dWmsXE_7WHlKi56YvW47UoNMBEcEaQ1Sj3b-cu6pgG3w887itvgVodN7mS-SosOCNW9xxVhRcaEEPdO8JJlElPaKFDMVgIwgV4bzU0jE6fIxv_YkjV0II1DlzhLKIFFIWiSw:feedlydev",
+      "categoryStream": "user/06ed4d6b-1d1c-4b1e-8e91-05502c2c6508/category/"
     }
   },
     "uir": {

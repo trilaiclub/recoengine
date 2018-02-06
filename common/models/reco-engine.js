@@ -13,9 +13,11 @@ module.exports = function(Recoengine) {
       var solrBucket = configObj.solrbucket;
       solrBucket.client.host = process.env.SOLR_BUCKET;
 
+      Recoengine.reqCount = 0;
+
       Recoengine.sClient = solr.createClient(solrBucket.client);
 
-      Recoengine.articles = [];
+      Recoengine.articles = {};
 
       Recoengine.sqActivitiesByUserID = function(squery, userID, cb) {
 
@@ -32,7 +34,7 @@ module.exports = function(Recoengine) {
 
             query.set('fq=userid:'+userID);
 
-              console.log("Build Query:  " + query);
+              //console.log("Build Query:  " + query);
 
               Recoengine.sClient.search(query,function(err,obj){
                  if(err){
@@ -42,7 +44,7 @@ module.exports = function(Recoengine) {
                  }else{
 
                   response = obj;
-                  console.log("Response:" + JSON.stringify(obj, undefined, 2));
+                  //console.log("Response:" + JSON.stringify(obj, undefined, 2));
                  }
 
                  cb(err, obj);
@@ -93,7 +95,8 @@ module.exports = function(Recoengine) {
       Recoengine.parseBody = function(body){
 
           var obj = JSON.parse(body);
-          return JSON.parse(obj.response.body);
+          //console.log(body);
+          return obj;
       }
 
     //Copy Array to maintain order
@@ -168,7 +171,7 @@ module.exports = function(Recoengine) {
             var sFacets = rFacets.category.concat(rFacets.tokens);
             var facets = Recoengine.createNamedList(sFacets, true);
 
-            console.log("Docs:" + JSON.stringify(response.docs, undefined, 2));
+            //console.log("Docs:" + JSON.stringify(response.docs, undefined, 2));
 
             var docs = response.docs;
             for(var index = 0; index < docs.length; index++){
@@ -200,24 +203,23 @@ module.exports = function(Recoengine) {
             var query = rule.cacheWord.replace(/~/g, '');
             var space = (query.length > 0) ? ' ' : '';
                 query += space + phrase;
-            console.log(query + '---');
+            //console.log(query + '---');
             var options = Recoengine.buildRequest(rule.feedlyPipeTag, query, "title");
             return options;
         }
 
     //Compute
 
-        Recoengine.compute = function(userID, cb) {
+        Recoengine.compute = function(userID, gAction, cb) {
 
           var config = Recoengine.clone(configObj);
+          var action = gAction;
 
+          //Purchased & Browsed algo
 
-          //Purchased algo
+          var purchasedQuery = config.uir['compute_'+action].params;
 
-          var purchasedQuery = config.uir.compute_purchased.params;
-          var action = "purchased";
-
-          console.log("Given " + action + " Query: " + purchasedQuery); //debug
+          //console.log("Given " + action + " Query: " + purchasedQuery); //debug
 
           Recoengine.sqActivitiesByUserID(purchasedQuery, userID, function(err, sqResponse){
 
@@ -228,7 +230,7 @@ module.exports = function(Recoengine) {
                   var ruleSet = Recoengine.formatRulesAsCategory(rRules);
                   var isAllAvailable = ("All" in ruleSet);
 
-                  console.log(ruleSet); //debug
+                  //console.log(ruleSet); //debug
 
                   var counter = Object.keys(uiRanks.searchkeys).length;
                   for (const [key, value] of Object.entries(uiRanks.searchkeys)) {
@@ -241,7 +243,7 @@ module.exports = function(Recoengine) {
                       var headers = [];
                       if(isAllAvailable) headers.push('All');
                       if(ruleSet[category]) headers.push(category);
-                      console.log(headers);
+                      //console.log(headers);
 
                       var hCounter = headers.length;
                       for(var h = 0; h < headers.length; h++) {
@@ -252,13 +254,13 @@ module.exports = function(Recoengine) {
                           if(header in ruleSet) {
                               var rCounter = ruleSet[header].length;
                               for(var index = 0; index < ruleSet[header].length; index++) {
-                                  console.log(header);
+                                  //console.log(header);
                                   var options = Recoengine.process(phrase, ruleSet[header][index]);
-                                  console.log(options); //debug
+                                  //console.log(options); //debug
 
                                   --rCounter;
+                                  Recoengine.reqCount++;
                                   request(options, Recoengine.requestProxy(counter, hCounter, rCounter, cb));
-
                               }
                           }
                       }
@@ -269,14 +271,14 @@ module.exports = function(Recoengine) {
               //cb(null, uiRanks);
             });
           });
-
-          //Browsed algo
-
         }
 
         Recoengine.remoteMethod('compute', {
               http: {path: '/compute', verb: 'get'},
-              accepts: {arg: 'userid', type: 'string'},
+              accepts: [
+                              { arg: 'userid', type: 'string' },
+                              { arg: 'gAction', type: 'string' }
+                        ],
               returns: {arg: 'response', type: 'object', 'http': {source: 'res'}}
         });
 
@@ -291,61 +293,47 @@ module.exports = function(Recoengine) {
                 else
                    pResponse = Recoengine.parseBody(body);
 
-                console.log(pResponse);
+                //console.log(pResponse);
                  //mocked data to avoid exploidation of 250 limit in feedly
                  //var proxyJson = process.cwd() + '/' + "proxysample.json";
                  //var pResponse = require(proxyJson);
 
-                 //console.log(pResponse);
-                 var eContents = pResponse;
+                 ////console.log(pResponse); //debug
+                 var eContents = {};
+                 eContents.items = pResponse.response;
+                 if(eContents.items == undefined) eContents.items = [];
                  let iCounter = eContents.items.length;
+                 Recoengine.reqCount--;
+
                  if(iCounter > 0) {
                      for(var iIndex = 0; iIndex < eContents.items.length; iIndex++ ) {
 
                        --iCounter;
                        Recoengine.addArticle(eContents.items[iIndex]);
-
-                       var status = (counter + hCounter + rCounter + iCounter);
-                       console.log("---"+counter+"----"+hCounter+"---"+rCounter+"-----"+iCounter+"|" + status);
-
-                       if(status == 0 ) cb(null, Recoengine.articles);
                      }
-                 } else {
-
-                       var status = (counter + hCounter + rCounter + iCounter);
-                       console.log("---"+counter+"----"+hCounter+"---"+rCounter+"-----"+iCounter+"|" + status);
-
-                       if(status == 0 ) cb(null, Recoengine.articles);
                  }
 
-                   //cb(null, pResponse);
+                 var status = (Recoengine.reqCount);
+                 //console.log(Recoengine.reqCount + "---"+counter+"----"+hCounter+"---"+rCounter+"-----"+iCounter+"|" + status);
+
+                 if(status == 0 ) {
+
+                    var list = Recoengine.toUIFormat(Recoengine.articles);
+                    Recoengine.articles = {};
+                    cb(null, list);
+                 }
              }
         }
 
 
         Recoengine.addArticle = function(obj) {
 
-                    var imgUrl = '';
+            Recoengine.articles[obj.id] = obj;
+        }
 
-                    if('thumbnail' in obj)
-                        imgUrl = (obj.thumbnail.length > 0) ? obj.thumbnail[0].url : null;
+        Recoengine.toUIFormat = function(obj) {
 
-                    var content = 'Nothing available';
 
-                    if('summary' in obj)
-                    if('content' in obj.summary)
-                      content = obj.summary.content;
-
-                    var result = {
-                                     "id": obj.id,
-                                     "title": obj.title,
-                                     "description": content,
-                                     "sourceurl": obj.canonicalUrl,
-                                     "urltoimage": imgUrl
-                                   };
-
-                    console.log(result); //debug
-
-                    Recoengine.articles.push(result);
-                }
+            return Object.keys(obj).map(function(k) { return obj[k] });
+        }
 };

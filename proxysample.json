@@ -1,115 +1,18 @@
 {
-  "response": {
-    "searchElapsedTime": 81,
-    "advancedSearch": true,
-    "terms": [
-      "how",
-      "Google",
-      "2",
-      "to",
-      "pixel"
-    ],
-    "searchTime": 78,
-    "id": "user/06ed4d6b-1d1c-4b1e-8e91-05502c2c6508/category/Review",
-    "title": "Search results for '{qs=how to Google pixel 2}'",
-    "updated": 1517243386056,
-    "items": [
-      {
-        "id": "ky9RJKBo4Xsvcd5rpMWbmekKnqGXJW1Weq+ex6RqYhQ=_15fe33398cf:3153f82:3c0bb656",
-        "keywords": [
-          "Mobiles"
-        ],
-        "originId": "1778665",
-        "fingerprint": "49995d8b",
-        "thumbnail": [
-          {
-            "url": "https://i.gadgets360cdn.com/large/pixel_2_back_small_1511344856874.jpg"
-          }
-        ],
-        "title": "Google Finally Fixes Pixel 2 Bootloader Issue, Here's How to Unlock It",
-        "published": 1511345073000,
-        "crawled": 1511345330383,
-        "origin": {
-          "streamId": "feed/http://gadgets.ndtv.com/rss/news",
-          "title": "RSS Feeds : RSS NEWS Feed - NDTV Gadgets360.com",
-          "htmlUrl": "https://gadgets.ndtv.com/"
-        },
-        "alternate": [
-          {
-            "href": "https://gadgets.ndtv.com/mobiles/news/google-fixes-pixel-2-disabled-bootloader-unlocking-issue-1778665",
-            "type": "text/html"
-          }
-        ],
-        "summary": {
-          "content": "Google has fixed the unlocked bootloader disabled issue on some Pixel 2 users.",
-          "direction": "ltr"
-        },
-        "visual": {
-          "processor": "feedly-nikon-v3.1",
-          "url": "https://i.gadgets360cdn.com/large/pixel_2_back_1511344874995.jpg",
-          "width": 800,
-          "height": 450,
-          "contentType": "image/jpeg"
-        },
-        "canonicalUrl": "https://gadgets.ndtv.com/mobiles/news/google-fixes-pixel-2-disabled-bootloader-unlocking-issue-1778665",
-        "ampUrl": "https://gadgets.ndtv.com/mobiles/news/google-fixes-pixel-2-disabled-bootloader-unlocking-issue-1778665?amp=1&akamai-rum=off",
-        "cdnAmpUrl": "https://gadgets-ndtv-com.cdn.ampproject.org/c/s/gadgets.ndtv.com/mobiles/news/google-fixes-pixel-2-disabled-bootloader-unlocking-issue-1778665?amp=1&akamai-rum=off",
-        "unread": false,
-        "categories": [
-          {
-            "id": "user/06ed4d6b-1d1c-4b1e-8e91-05502c2c6508/category/Review",
-            "label": "Reviews"
-          }
-        ],
-        "engagement": 9
-      },
-      {
-        "id": "DMF+72Qr4uStBtTn41fn9Ji7vx/cjRowyvdwwsllJlc=_15eeabbc599:9a221f:d137ef92",
-        "originId": "2103a5a2-5825-4829-9035-f85ec2247e95",
-        "fingerprint": "a2a268d5",
-        "thumbnail": [
-          {
-            "url": "https://cnet2.cbsistatic.com/img/WEkaO_zrEST5ptv69_NAud_HCFE=/300x230/2017/10/04/51b26b06-b9be-452c-a280-f0eda250bbb9/100417-google-pixel-2-xl-7317.jpg"
-          }
-        ],
-        "title": "This is how Google wants you to switch from iPhone to Pixel 2     - CNET",
-        "published": 1507175528000,
-        "crawled": 1507176727961,
-        "origin": {
-          "streamId": "feed/http://www.cnet.com/rss/all/",
-          "title": "CNET",
-          "htmlUrl": "https://www.cnet.com/#ftag=CADf328eec"
-        },
-        "alternate": [
-          {
-            "href": "https://www.cnet.com/news/this-is-how-google-wants-you-to-switch-from-iphone-to-pixel-2/#ftag=CADf328eec",
-            "type": "text/html"
-          }
-        ],
-        "author": "Chris Matyszczyk",
-        "summary": {
-          "content": "Commentary: Google releases a special video that suggests you should have some new clothes to model to pass the time as you switch phones.",
-          "direction": "ltr"
-        },
-        "visual": {
-          "processor": "feedly-nikon-v3.1",
-          "url": "https://cnet2.cbsistatic.com/img/kXICDl0TJaYZ2qhPug4ZB2t6DgQ=/670x503/2017/10/04/51b26b06-b9be-452c-a280-f0eda250bbb9/100417-google-pixel-2-xl-7317.jpg",
-          "width": 670,
-          "height": 503,
-          "contentType": "image/jpeg"
-        },
-        "canonicalUrl": "https://www.cnet.com/news/this-is-how-google-wants-you-to-switch-from-iphone-to-pixel-2/",
-        "ampUrl": "https://www.cnet.com/google-amp/news/this-is-how-google-wants-you-to-switch-from-iphone-to-pixel-2/",
-        "cdnAmpUrl": "https://www-cnet-com.cdn.ampproject.org/c/s/www.cnet.com/google-amp/news/this-is-how-google-wants-you-to-switch-from-iphone-to-pixel-2/",
-        "unread": false,
-        "categories": [
-          {
-            "id": "user/06ed4d6b-1d1c-4b1e-8e91-05502c2c6508/category/Review",
-            "label": "Reviews"
-          }
-        ],
-        "engagement": 313
-      }
-    ]
-  }
+  "response": [
+    {
+      "id": "jMekjip3Ghllh8F4KHnMLhQXZxuefoU5q97qggITdgs=_1616b341dc9:594eb:9e976e77",
+      "title": "No Internet? No Problem: Play These 10 Best Offline Games on iPhone or iPad",
+      "description": "<div><img width=\"670\" alt=\"offline-ipad-iphone-games\" src=\"https://cdn.makeuseof.com/wp-content/uploads/2018/02/offline-ipad-iphone-games-670x335.jpg\" class=\"wp-post-image\" height=\"335\"></div><p>With today’s digital age and portable pocket computers, we’re almost always online in some way. That is, until we’re not. Most smartphone owners have a cellular data plan to go along with them. But sometimes, you just can’t get a signal, such as underground commutes on the subway or out in the middle of nowhere. After a hard day’s work, we just want to relax. So we have games on our iPhones and iPads. And while there are a ton of gaming options to consider on the App Store, what if you’re looking for something that you can play even...</p><p>Read the full article: <a href=\"https://www.makeuseof.com/tag/best-offline-games-iphone-ipad/\">No Internet? No Problem: Play These 10 Best Offline Games on iPhone or iPad</a></p>",
+      "sourceurl": "https://www.makeuseof.com/tag/best-offline-games-iphone-ipad/",
+      "urltoimage": ""
+    },
+    {
+      "id": "dAGhZNNwHO4TccPctc/0lwTTFCcm7LLu7QtCwNAYWbg=_1616acb4991:318dce2:3c0bb656",
+      "title": "How to Add, Switch, Reorder & Delete Keyboards on Your iPhone",
+      "description": "<div><div><center><a href=\"https://ios.gadgethacks.com/how-to/add-switch-reorder-delete-keyboards-your-iphone-0157501/\"><img border=\"0\" width=\"600\" src=\"https://img.wonderhowto.com/img/25/80/63653420482623/0/add-switch-reorder-delete-keyboards-your-iphone.1280x600.jpg\" height=\"280\"></a></center></div> <p>Back in iOS 8, Apple introduced the option to use third-party keyboards on iPhone, and since then, there have been a ton of third-party keyboards available such as Gboard, Swype, AudioShot, SwiftKey, Slated, and many more. However, adding and even using these keyboards can be kind of tricky.\nIf you've never tried using a third-party keyboard before, a good one in the iOS App Store to test out would be Gboard (free), which is made by Google. It also comes baked into the main Google app (also free), which is nice if you don't want to feel like you have to banish your keyboard apps into a hidden<a href=\"https://ios.gadgethacks.com/how-to/add-switch-reorder-delete-keyboards-your-iphone-0157501/\">... more</a></p><span></span></div>",
+      "sourceurl": "https://ios.gadgethacks.com/how-to/add-switch-reorder-delete-keyboards-your-iphone-0157501/",
+      "urltoimage": "https://img.wonderhowto.com/img/25/80/63653420482623/0/add-switch-reorder-delete-keyboards-your-iphone.1280x600.jpg"
+    }
+  ]
 }
