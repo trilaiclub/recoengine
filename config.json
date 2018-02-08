@@ -10,9 +10,9 @@
    },
   "proxy": {
     "client": {
-      "url": "http://proxy:3002/api",
+      "url": "http://ec2-34-201-43-55.compute-1.amazonaws.com:3002/api",
       "user": "8d79bb29-bf31-4383-89aa-6b824f81ece0",
-      "authUrl": "http://proxy:3001/api/auth",
+      "authUrl": "http://ec2-34-201-43-55.compute-1.amazonaws.com:3002/api/auth",
       "secret": "OAuth   AwgOpsRKvpP9MgiAmjJqtd5YiLxVxH4GcKpwEQF4Nfslm9-PWHoxRto58FNWRfww292L0wo8f6GPZGwWG1DT_LCYcJmwDywGMJq5VPQidlMYZOkTgIXEYU2mrSNUNQedmoo0dOV268fIqQ9sNQbSnK5HI3wyJMnu71mbxecr91gEOYc0_Ix0-AoIXpNE7TJG5M21OjhdyJB2R-edBLcDzA29dRCc3tPL1GGAMrdrd9rHbSVd75KnN5fIT3FG:feedlydev",
       "categoryStream": "user/8d79bb29-bf31-4383-89aa-6b824f81ece0/category/"
     }
